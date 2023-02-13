@@ -1,5 +1,14 @@
 # fopss2023 Liquid Haskell Lecture 
 
+# installation
+
+```
+git clone git@github.com:nikivazou/fopss2023.git
+cd fopss2023
+stack install 
+```
+
+
 # Lecture I: Liquid Haskell Overview  
 # Lecture II: Resource Analysis with RTick 
 # Lecture III: Theorem Proving 

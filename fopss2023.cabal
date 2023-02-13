@@ -1,0 +1,33 @@
+name:                fopss2023
+version:             0.1.0.0
+license:             MIT
+license-file:        LICENSE
+author:              Niki Vazou
+maintainer:          nikivazou@gmail.com
+build-type:          Simple
+extra-source-files:  ChangeLog.md, README.md
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs: src
+  exposed-modules:
+  -- lecture I 
+       Intro 
+       List 
+       SortedList
+
+  -- optional: sorting algorithms  
+       InsertSort
+       MergeSort 
+       GHCSort  
+  -- theorem proving! 
+       ListTheorems 
+  build-depends:
+       liquidhaskell                     >= 0.8.10 && < 0.9
+     , liquid-containers                 >= 0.6.2 && < 0.7
+     , liquid-base
+     , liquid-prelude
+     , rest-rewrite                     
+  hs-source-dirs: src
+  default-language: Haskell2010
+  ghc-options: -fplugin=LiquidHaskell
