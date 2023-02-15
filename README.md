@@ -4,7 +4,7 @@
 
 ```
 git clone git@github.com:nikivazou/fopss2023.git
-cd fopss2023
+cd fopss2023/intro
 stack install 
 ```
 
