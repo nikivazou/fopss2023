@@ -21,7 +21,11 @@ stack install
 ### Extra verifies sorting algorithms: InsertSort.lhs, MergeSort.lhs, GHCSort.lhs.  
 ## ListTheorems.lhs: is an intro to theorem proving potential of Liquid Haskell that proves associativity and distributivity of list append. 
 
-# Lecture II: Resource Analysis with RTick 
+# Lecture II: Resource Analysis with RTick
+### `RTick.hs` library definition 
+### `ISort.hs` insertion sort with bound 
+### `ISortLazy.hs` insertion sort on lazy lists 
+### `ISortSorted.hs` prove relational theorem on isort 
 
 # Lecture III: Theorem Proving 
 

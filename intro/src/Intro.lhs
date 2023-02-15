@@ -10,7 +10,7 @@ For example, we refine the Haskell integer type to encode
 
 > {-@ fourtytwo :: {v:Int | 42 == v } @-}
 > fourtytwo :: Int
-> fourtytwo = 42
+> fourtytwo = 40
 
 
 > {-@ zero :: {v:Int | 0 <= v } @-}
