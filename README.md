@@ -1,10 +1,15 @@
 # fopss2023 Liquid Haskell Lecture 
 
+Niki Vazou, 
+IMDEA Sortware Institute, 
+Madrid
+
+
 # Installation
 
 ```
 git clone git@github.com:nikivazou/fopss2023.git
-cd fopss2023/intro
+cd fopss2023/liquidate
 stack install 
 ```
 
