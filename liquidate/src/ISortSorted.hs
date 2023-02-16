@@ -5,7 +5,7 @@ module ISortSorted where
 
 import Prelude hiding (pure,(<*>),(>>=), length)
 import List 
-import Language.Haskell.Liquid.ProofCombinators 
+import Language.Haskell.Liquid.ProofCombinators -- ((***), QED, (=>=), (=<=), (===), (?))
 
 import RTick 
 import ISort 
@@ -15,9 +15,30 @@ theorem :: Ord a => [a] -> [a] -> ()
 {-@ theorem :: Ord a => xs:OList a
             -> ys:{[a] | length xs == length ys } 
             -> {tcost (isort xs) <= tcost (isort ys)} @-} 
-theorem xs ys = undefined 
+theorem xs ys = theoremLow xs ? theoremUpper ys  
 
+theoremLow :: Ord a => [a] -> () 
+{-@ theoremLow :: Ord a => xs:OList a
+            -> { tcost (isort xs) <= length xs } @-} 
+theoremLow []  = () 
+theoremLow [_] = () 
+theoremLow (x:xs)  
+  =   tcost (isort (x:xs)) 
+  === tcost (bbind (length xs) (isort xs) (insert x)) 
+  === tcost (isort xs) + tcost (insert x (tval (isort xs)))
+      ?  theoremLow xs  
+  =<= length xs + tcost (insert x (tval (isort xs))) 
+      ? isortSortedVal xs 
+  =<= length xs + tcost (insert x xs) 
+  =<= length xs + 1 
+  *** QED 
 
+theoremUpper :: Ord a => [a] -> () 
+{-@ theoremUpper :: Ord a => xs: [a]
+            -> { length xs <= tcost (isort xs) } @-} 
+theoremUpper []  = ()
+theoremUpper (x:xs)
+  = undefined   
 
 
 
@@ -36,5 +57,8 @@ theorem xs ys = undefined
 
 
 isortSortedVal :: Ord a => [a] -> () 
-{-@ isortSortedVal :: Ord a => xs:OList a -> { tval (isort xs) == xs }  @-}
-isortSortedVal _ = undefined 
+{-@ isortSortedVal :: Ord a => xs:OList a 
+                   -> { tval (isort xs) == xs }  @-}
+isortSortedVal [] = ()
+isortSortedVal [_] = ()
+isortSortedVal (x:xs) = isortSortedVal xs  

@@ -13,11 +13,15 @@ insert :: (Ord a) => a -> [a] -> RTick [a]
 {-@ insert :: (Ord a) 
            => x:a -> xs:OList a
            -> {t: RTick {os:(OList a) | length os == length xs + 1} 
-                | tcost t <= length xs } @-}
+                | tcost t <= length xs  } @-}
 insert x []   = pure [x]
 insert x (y:ys) 
   | x <= y    = step (x:y:ys)
   | otherwise = pure ((:) y) </> insert x ys 
+
+
+
+
 
 {-@ reflect isort @-}
 {-@ isort :: Ord a => xs:[a] 

@@ -18,10 +18,14 @@ data LList a = LNil | LCons a (RTick (LList a))
 {-@ type SLList a = LList <{\x y -> x <= y}> a @-}
 
 
+
+
+
+
 -- Q: What is the complexity of minimum? 
 
 {-@ minimum :: Ord a => xs:{[a] | 0 < length xs} 
-            -> {t:RTick a | true } @-} 
+            -> {t:RTick a | tcost t <= 5 * length xs } @-} 
 minimum :: Ord a => [a] -> RTick a 
 minimum xs = pure lhead <*> isort xs 
 
@@ -29,17 +33,19 @@ minimum xs = pure lhead <*> isort xs
 -- Q: What is the complexity of isort? 
 
 {-@ isort :: Ord a => xs:[a] 
-         -> {t:RTick (SLList a) | true } @-}
+         -> {t:RTick (SLList a) | tcost t <= 5 * length xs } @-}
 isort :: Ord a => [a] -> RTick (LList a)
 isort []     = pure LNil
-isort (x:xs) = (isort xs) >>= (insert x) 
+isort (x:xs) = bbind 5 (isort xs) (insert x) 
 
+
+-- (insert x (tval (isort xs)))
 
 
 -- Q: What is the complexity of insert? 
 
-{-@ insert :: Ord a => a -> xs:SLList a 
-           -> {t:RTick (SLList a) | true  } @-}
+{-@ insert :: Ord a => a -> xs:SLList a  
+           -> {t:RTick (SLList a) | tcost t <= 5  } @-}
 insert :: Ord a => a -> LList a -> RTick (LList a) 
 insert x LNil = pure (LCons x (pure LNil))
 insert x (LCons y ys)
