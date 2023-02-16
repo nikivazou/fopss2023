@@ -12,33 +12,35 @@ import ISort
 
 
 theorem :: Ord a => [a] -> [a] -> () 
-{-@ theorem :: Ord a => xs:OList a
+{-@ theorem :: Ord a => xs:{OList a | 1 < length xs }
             -> ys:{[a] | length xs == length ys } 
             -> {tcost (isort xs) <= tcost (isort ys)} @-} 
 theorem xs ys = theoremLow xs ? theoremUpper ys  
 
 theoremLow :: Ord a => [a] -> () 
-{-@ theoremLow :: Ord a => xs:OList a
-            -> { tcost (isort xs) <= length xs } @-} 
-theoremLow []  = () 
-theoremLow [_] = () 
+{-@ theoremLow :: Ord a => xs:{OList a | 1 < length xs}
+            -> { tcost (isort xs) <= length xs - 1 } @-} 
+theoremLow [_,_] = () 
 theoremLow (x:xs)  
-  =   tcost (isort (x:xs)) 
-  === tcost (bbind (length xs) (isort xs) (insert x)) 
-  === tcost (isort xs) + tcost (insert x (tval (isort xs)))
-      ?  theoremLow xs  
-  =<= length xs + tcost (insert x (tval (isort xs))) 
-      ? isortSortedVal xs 
-  =<= length xs + tcost (insert x xs) 
-  =<= length xs + 1 
-  *** QED 
+  = theoremLow xs  
+  ? isortSortedVal xs 
 
 theoremUpper :: Ord a => [a] -> () 
-{-@ theoremUpper :: Ord a => xs: [a]
-            -> { length xs <= tcost (isort xs) } @-} 
-theoremUpper []  = ()
+{-@ theoremUpper :: Ord a => xs: {[a] | 1 < length xs } 
+            -> { length xs - 1 <= tcost (isort xs) } @-} 
+theoremUpper [x,y] 
+  =   tcost (isort [x,y])
+  ===  tcost (bbind (length [x,y]) (isort [y]) (insert x)) 
+  ===  tcost (isort [y]) + tcost (insert x (tval (isort [y]))) 
+  *** QED 
 theoremUpper (x:xs)
-  = undefined   
+  =   tcost (isort (x:xs))  
+  === tcost (bbind (length xs) (isort xs) (insert x))  
+  === tcost (isort xs) + tcost (insert x (tval (isort xs)))
+      ? theoremUpper xs 
+  =>= length xs - 1 + tcost (insert x (tval (isort xs)))   
+  =>= length xs     
+  *** QED 
 
 
 
