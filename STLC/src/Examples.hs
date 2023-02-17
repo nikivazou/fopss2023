@@ -81,14 +81,45 @@ intLam = ELam (TPrim TInt) (EBVar 0)
 ex_step :: Step 
 ex_step = SAppEL (EBVar 0) fourtyTwo (TPrim TInt)   
 
-{-@ test1 :: () -> Prop (HasType (EBind 0 (TPrim TBool) EEmp) (EFVar 0) (TPrim TBool)) @-}
-test1 :: () -> HasType 
-test1 _ = TVar (EBind 0 (TPrim TBool) EEmp) 0   
+
+
+
+-- | Proof of `|- ((\x.x) 42) :: Int` 
+
+{-@ type_intLam :: Prop (HasType EEmp (EApp intLam fourtyTwo) (TPrim TInt)) @-}
+type_intLam :: HasType 
+type_intLam = 
+  -- |- ((\x.x) 42) :: Int 
+  TApp EEmp intLam fourtyTwo tInt tInt 
+  --       |- (\x.x) :: Int -> Int  
+       (assertProp (HasType EEmp intLam (TFun tInt tInt)) (
+        TLam EEmp (EBVar 0) tInt tInt xx (
+          (TVar (EBind xx tInt EEmp) xx )
+        )
+        ) )
+  --       |- 42 :: Int 
+       (assertProp (HasType EEmp fourtyTwo tInt) (TCon EEmp (PInt 42)))
+
+
+
+
+
+
+
+
 
 -- | The Integer Type 
 {-@ reflect tInt @-}
 tInt :: Type 
 tInt = TPrim TInt
+
+
+-- | The Integer Type 
+{-@ reflect xx @-}
+{-@ xx :: Var @-} 
+xx :: Var 
+xx = 100
+
 
 -- | Reflect Everything 
 

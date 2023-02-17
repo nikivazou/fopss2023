@@ -7,6 +7,10 @@ Summary:
     - append, isort
     by reflecting list append and isort in the logic
 
+
+
+Today:
+
 What about functions that do not terminate? 
 Can we, for example, prove soundness of STLC? 
 
