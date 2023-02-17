@@ -23,4 +23,4 @@ Today:
 2. Examples 
 3. Soundness Theorem
 ---------------------
-4. Keynote on incomplete state of refinement types
+4. Slides on incomplete state of refinement types
